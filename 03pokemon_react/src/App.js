@@ -7,6 +7,8 @@ import { getAllPokemon, getPokemon } from "./utils/pokemon.js";
 const App = () => {
   const [loading, setLoading] = useState(true);
   const [pokemonData, setPokemonData] = useState([]);
+  const [nextURL, setNextURL] = useState("");
+  const [prevURL, setPrevURL] = useState("");
 
   const initialURL = "https://pokeapi.co/api/v2/pokemon";
 
@@ -16,7 +18,9 @@ const App = () => {
       let res = await getAllPokemon(initialURL);
       // Each Pokemon
       loadPokemon(res.results);
-      console.log(res);
+      // console.log(res)
+      setNextURL(res.next);
+      setPrevURL(res.previous);
       setLoading(false);
     };
     fetchPokemonData();
@@ -34,11 +38,23 @@ const App = () => {
 
   // console.log(pokemonData);
 
-  const handlePrevPage = () => {};
+  const handlePrevPage = async () => {
+    if (!prevURL) return;
+    setLoading(true);
+    let data = await getAllPokemon(prevURL);
+    await loadPokemon(data.results);
+    setNextURL(data.next);
+    setPrevURL(data.previous);
+    setLoading(false);
+  };
 
   const handleNextPage = async () => {
     setLoading(true);
-    let data = await getAllPokemon();
+    let data = await getAllPokemon(nextURL);
+    await loadPokemon(data.results);
+    setNextURL(data.next);
+    setPrevURL(data.previous);
+    setLoading(false);
   };
 
   return (
