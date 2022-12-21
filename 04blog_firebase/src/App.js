@@ -7,8 +7,8 @@ import Navbar from "./components/navbar/Navbar";
 import CreatePost from "./components/post/CreatePost";
 
 const App = () => {
-  const [isAuth, setIsAuth] = useState(false);
-  
+  const [isAuth, setIsAuth] = useState(localStorage.getItem("isAuth"));
+
   return (
     <Router>
       <Navbar isAuth={isAuth} />
