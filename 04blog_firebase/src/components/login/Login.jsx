@@ -13,7 +13,7 @@ const Login = ({ setIsAuth }) => {
         setIsAuth(true);
         localStorage.setItem("isAuth", true);
         navigate("/");
-        // console.log(result);
+        // console.log(result.user);
       })
       .catch((err) => {
         console.log(err);

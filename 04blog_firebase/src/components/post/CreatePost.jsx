@@ -1,14 +1,29 @@
 import React, { useState } from "react";
 import "./CreatePost.css";
-
+import { auth, db } from "../../firebase/firebase";
+import { collection, addDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [postText, setPostText] = useState("");
+  const navigate = useNavigate("");
 
-  const handlePost = () => {
-    console.log(title);
-    console.log(postText);
+  const handlePost = async () => {
+    try {
+      await addDoc(collection(db, "posts"), {
+        titie: title,
+        postText: postText,
+        author: {
+          id: auth.currentUser.uid,
+          username: auth.currentUser.displayName,
+        },
+      });
+      console.log("Succesfully post a article");
+      navigate("/");
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
