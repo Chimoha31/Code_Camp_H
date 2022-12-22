@@ -1,8 +1,13 @@
 import React from "react";
 import "./Sidebar.css";
 
-const Sidebar = ({ handleAddNote, handleDeleteNote, notes }) => {
-  
+const Sidebar = ({
+  handleAddNote,
+  handleDeleteNote,
+  notes,
+  activeNote,
+  setActiveNote,
+}) => {
   return (
     <div className="app-sidebar">
       <div className="app-sidebar-header">
@@ -11,7 +16,11 @@ const Sidebar = ({ handleAddNote, handleDeleteNote, notes }) => {
       </div>
       <div className="app-sidebar-notes">
         {notes.map((note) => (
-          <div className="app-sidebar-note" key={note.id}>
+          <div
+            className={`app-sidebar-note ${note.id === activeNote && "active"}`}
+            key={note.id}
+            onClick={() => setActiveNote(note.id)}
+          >
             <div className="sidebar-note-title">
               <strong>{note.title}</strong>
               <button onClick={() => handleDeleteNote(note.id)}>Delete</button>
