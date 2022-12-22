@@ -3,19 +3,30 @@ import "./App.css";
 import Main from "./components/main/Main";
 import Sidebar from "./components/sidebar/Sidebar";
 import uuid from "react-uuid";
-import ReactMarkdown from 'react-markdown'
 
 const App = () => {
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState(
+    JSON.parse(localStorage.getItem("notes")) || []
+  );
   const [activeNote, setActiveNote] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+    // eslint-disable-next-line
+  }, [notes]);
+
+  useEffect(() => {
+    setActiveNote(notes[0].id);
+    // eslint-disable-next-line
+  }, []);
 
   // Add Note
   const handleAddNote = () => {
     console.log("Added note!");
     const newNote = {
       id: uuid(),
-      title: "Chiho's note",
-      content: "I took a walk with Teddy kun 🐶",
+      title: "",
+      content: "",
       modDate: Date.now(),
     };
     setNotes([...notes, newNote]);
@@ -46,7 +57,6 @@ const App = () => {
     setNotes(updatedNotesArray);
   };
 
- 
   return (
     <div className="App">
       <Sidebar
