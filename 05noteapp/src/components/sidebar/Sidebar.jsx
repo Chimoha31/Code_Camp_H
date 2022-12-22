@@ -1,7 +1,8 @@
 import React from "react";
 import "./Sidebar.css";
 
-const Sidebar = ({ handleAddNote, notes }) => {
+const Sidebar = ({ handleAddNote, handleDeleteNote, notes }) => {
+  
   return (
     <div className="app-sidebar">
       <div className="app-sidebar-header">
@@ -13,11 +14,11 @@ const Sidebar = ({ handleAddNote, notes }) => {
           <div className="app-sidebar-note" key={note.id}>
             <div className="sidebar-note-title">
               <strong>{note.title}</strong>
-              <button>Delete</button>
+              <button onClick={() => handleDeleteNote(note.id)}>Delete</button>
             </div>
             <p>{note.content}</p>
             <small>
-              Last update:{" "}
+              Last update:
               {new Date(note.modDate).toLocaleDateString("en-US", {
                 hour: "2-digit",
                 minute: "2-digit",
