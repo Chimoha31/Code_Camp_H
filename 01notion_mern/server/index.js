@@ -1,9 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
+const CryptoJs = require("crypto-js");
+const JWT = require("jsonwebtoken");
 const app = express();
-
 const PORT = 8000;
+
+// models
+const User = require("./src/v1/models/user");
+
 
 // Connect mongoDB
 mongoose
@@ -16,10 +21,15 @@ mongoose
   });
 
 // API
-app.post("/resister", (req, res) => {
+app.post("/resister", async (req, res) => {
+  // passwordの受け取り
+  const password = req.body.password;
   try {
-    const password = req.body.password;
-    
+    // passwordの暗号化
+    req.body.password = CryptoJS.AES.encrypt(password, process.env.SECRET_KEY);
+    // Userの新規登録
+    const user = await User.create(req.body);
+    // JWTの発行
   } catch (err) {
     return res.status(500).json(err);
   }
