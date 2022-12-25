@@ -20,3 +20,41 @@ exports.resister = async (req, res) => {
     return res.status(500).json(err);
   }
 };
+
+// Login
+exports.login = async (req, res) => {
+  const { userame, password } = req.body;
+
+  try {
+    // DBからuserが存在するか探してくる
+    const user = await User.findOne({ username: username });
+    if (!user) {
+      res.status(401).json({
+        errors: {
+          param: "username",
+          message: "Thare is no user.",
+        },
+      });
+    }
+    // Passwordが合っているか照合する(複合するときはdecrypt())
+    const decreptedPassword = CryptoJS.AES.decrypt(
+      user.password,
+      process.env.SECRET_KEY
+    );
+    if (decreptedPassword !== password) {
+      return res.status(401).json({
+        errors: {
+          params: "password",
+          message: "There is no match password",
+        },
+      });
+    }
+    // JWTの発行
+    const token = JWT.sign({ id: user._id }, process.env.TOKEN_SECRET_KEY, {
+      expiresIn: "24h",
+    });
+    return res.status(200).json(user, token);
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+};

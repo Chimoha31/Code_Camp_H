@@ -3,9 +3,8 @@ const User = require("../models/user");
 const { body } = require("express-validator");
 const userController = require("../controllers/users");
 const validation = require("../middleware/validation");
-// require("dotenv").config();
 
-// API
+// Resister
 router.post(
   "/resister",
   // Validation check
@@ -27,6 +26,15 @@ router.post(
   }),
   validation.validate,
   userController.resister
+);
+
+// Login
+router.post(
+  "/login",
+  body("username").isLength({ min: 6 }).withMessage(""),
+  bosy("password").isLength({ min: 5 }).withMessage(""),
+  validation.validate,
+  
 );
 
 module.exports = router;
