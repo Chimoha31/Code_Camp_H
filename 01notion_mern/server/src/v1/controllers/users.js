@@ -23,13 +23,13 @@ exports.resister = async (req, res) => {
 
 // Login
 exports.login = async (req, res) => {
-  const { userame, password } = req.body;
+  const { username, password } = req.body;
 
   try {
     // DBからuserが存在するか探してくる
     const user = await User.findOne({ username: username });
     if (!user) {
-      res.status(401).json({
+      return res.status(401).json({
         errors: {
           param: "username",
           message: "Thare is no user.",
@@ -40,20 +40,24 @@ exports.login = async (req, res) => {
     const decreptedPassword = CryptoJS.AES.decrypt(
       user.password,
       process.env.SECRET_KEY
-    );
+    ).toString(CryptoJS.enc.Utf8);
     if (decreptedPassword !== password) {
       return res.status(401).json({
-        errors: {
-          params: "password",
-          message: "There is no match password",
-        },
+        errors: [
+          {
+            params: "password",
+            message: "There is no match password",
+          },
+        ],
       });
     }
+    user.password = undefined;
+
     // JWTの発行
     const token = JWT.sign({ id: user._id }, process.env.TOKEN_SECRET_KEY, {
       expiresIn: "24h",
     });
-    return res.status(200).json(user, token);
+    return res.status(201).json({user, token});
   } catch (err) {
     return res.status(500).json(err);
   }

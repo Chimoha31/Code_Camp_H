@@ -4,7 +4,7 @@ const { body } = require("express-validator");
 const userController = require("../controllers/users");
 const validation = require("../middleware/validation");
 
-// Resister
+// Resister API
 router.post(
   "/resister",
   // Validation check
@@ -28,13 +28,15 @@ router.post(
   userController.resister
 );
 
-// Login
+// Login API
 router.post(
   "/login",
   body("username").isLength({ min: 6 }).withMessage(""),
-  bosy("password").isLength({ min: 5 }).withMessage(""),
+  body("password").isLength({ min: 5 }).withMessage(""),
   validation.validate,
-  
+  userController.login
 );
+
+// JWT Authentication API
 
 module.exports = router;
