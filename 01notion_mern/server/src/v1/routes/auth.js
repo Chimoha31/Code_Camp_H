@@ -3,6 +3,7 @@ const User = require("../models/user");
 const { body } = require("express-validator");
 const userController = require("../controllers/users");
 const validation = require("../middleware/validation");
+const tokenHandler = require("../middleware/tokenHandler");
 
 // Resister API
 router.post(
@@ -38,5 +39,8 @@ router.post(
 );
 
 // JWT Authentication API
+router.post("/verify-token", tokenHandler.verifyToken, async (req, res) => {
+  return res.status(200).json({ user: req.user });
+});
 
 module.exports = router;
