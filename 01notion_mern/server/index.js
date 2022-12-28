@@ -20,6 +20,7 @@ mongoose
 // Endpoint
 app.use("/api/v1", require("./src/v1/routes/auth"));
 
+// Server check
 app.listen(PORT, () => {
   console.log("Server is running 🚀");
 });
