@@ -5,30 +5,29 @@ import { LoadingButton } from "@mui/lab";
 import authApi from "../api/authApi";
 
 const Resister = () => {
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData(e.target);
     const username = data.get("username").trim();
     const password = data.get("password").trim();
     const confirmPassword = data.get("confirmPassword").trim();
-    // console.log(username);
-    // console.log(password);
-    // console.log(confirmPassword);
-  };
-
-
+    console.log(username);
+    console.log(password);
+    console.log(confirmPassword);
     try {
-      const res = await authApi.resister({
-        username,
-        password,
-        confirmPassword,
-      });
+      const res = await authApi.register({
+          username,
+          password,
+          confirmPassword,
+        });
       localStorage.setItem("token", res.token)
       console.log("Succesfully resistered account !")
-
+  
     } catch (err) {
       console.log(err);
     }
+  };
+
   
 
   return (

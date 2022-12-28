@@ -14,7 +14,7 @@ axiosClient.interceptors.request.use(async (config) => {
     ...config,
     header: {
       "Content-Type": "application/json",
-      authorization: `Baerer ${getToken()}`, //request headerにJWTを付けてServerに渡す
+      authorization: `Bearer ${getToken()}`, //request headerにJWTを付けてServerに渡す
     },
   };
 });
