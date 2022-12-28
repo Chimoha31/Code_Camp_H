@@ -11,7 +11,7 @@ const axiosClient = axios.create({
 // APIを叩く前に前処理を行う (request)
 axiosClient.interceptors.request.use(async (config) => {
   return {
-    config,
+    ...config,
     header: {
       "Content-Type": "application/json",
       authorization: `Baerer ${getToken()}`, //request headerにJWTを付けてServerに渡す
